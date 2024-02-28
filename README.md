@@ -13,8 +13,7 @@
     - Added /list_issuers_list
     - Added /list_document_type_name/{type_name}
     - Added /list_document_type_id/{type_id}
-    -
-    -
+
 
 + v0.0.2
     - added requirements.txt
