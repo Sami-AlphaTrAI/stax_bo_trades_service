@@ -107,13 +107,6 @@ def handle_error(e: Exception, message: str):
     return {"error": message}, 500
 
 
-def format_db_error(message: str):
-    message = message.split(": ")
-    if len(message) > 1:
-        message = message[-1].strip().lower()
-    return message
-
-
 # # Checks if a given date is the last day of the year
 # def is_last_day_of_year(target_date: datetime.date) -> bool:
 #     last_day_of_year = datetime(target_date.year, 12, 31).date()
