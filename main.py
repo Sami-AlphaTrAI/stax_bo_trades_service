@@ -172,18 +172,23 @@ async def update_app_rule(app_rule_data: ApplicationRuleUpdateModel):
         result = data_retriever.update_app_rule(app_rule_data_dict)
 
         if result.get('status') == 'error':
+            # db error check
+            if '45000' in result.get('message'):
+                db_error = str(result["message"]).split(':')[-1].strip().lower()
+                return {"status": "error", "message": f"Error while updating app rule: {db_error}"}
+
             logging.error(f"Error while updating app rule: {result['message']}")
             return result
 
         logging.info("Successfully updated app rule.")
-        return result
+        return {'message': 'Successfully updated app rule.'}
 
     except HTTPException as e:  # Catching FastAPI's HTTPException
         raise
 
     except Exception as e:
         logging.error(f"Unexpected error while updating app rule: {e}")
-        return {"status": "error", "message": f"Unexpected error while updating app rule: {str(e)}"}
+        return {"status": "error", "message": f"Unexpected error while updating app rule: {e}"}
 
 
 # Create trade doc meta
@@ -218,7 +223,7 @@ async def update_trade_doc_meta(trade_doc_meta: TradeDocMetaModel):
         result = data_retriever.update_trade_documents_meta(trade_doc_meta_dict)
 
         if result["status"] == "success" and result["message"] == "message":
-            result["message"] = "successfully update trade document meta "
+            result["message"] = "successfully update trade document meta"
         logging.info("update trade meta document")
 
         return result

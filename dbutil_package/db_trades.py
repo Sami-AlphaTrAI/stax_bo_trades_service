@@ -31,9 +31,14 @@ class DBHandler:
             data_result = {}
             # Initialize the response dictionary
             response = {}
+            message = ""
+
             if msg_only:
-                message = list(data[0].keys())[0]
+                if len(data) is not 0:
+                    message = list(data[0].keys())[0]
+
                 response["message"] = message
+
                 self.conn.commit()
                 response["status"] = "success"
                 return response
@@ -200,7 +205,7 @@ class AppRulesDataRetriever:
             app_rule_data['notes'],
             app_rule_data['user']
         ]
-        return self.db_handler.handle_sp_call("sp_reg_rule_review_update", params)
+        return self.db_handler.handle_sp_call("sp_reg_rule_review_update", params, msg_only=True)
 
     # create trade doc meta 
     def create_trade_documents_meta(self, trade_doc_meta: dict):
