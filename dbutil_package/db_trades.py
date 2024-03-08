@@ -34,7 +34,7 @@ class DBHandler:
             message = ""
 
             if msg_only:
-                if len(data) is not 0:
+                if len(data) != 0:
                     message = list(data[0].keys())[0]
 
                 response["message"] = message
@@ -190,7 +190,7 @@ class AppRulesDataRetriever:
     def lookup_app_rules(self, a_app_id: int) -> dict:
         return self.db_handler.handle_sp_call("sp_reg_review_lookup_AppId", [a_app_id], rec_type_key="app_rules_list")
 
-    # Retrieve sepecific rule for specific app
+    # Retrieve specific rule for specific app
     def look_app_rule_by_id(self, app_id, rule_id):
         return self.db_handler.handle_sp_call("sp_reg_review_lookup_RuleId", [app_id, rule_id], rec_type_key="app_rule")
 
@@ -207,59 +207,54 @@ class AppRulesDataRetriever:
         ]
         return self.db_handler.handle_sp_call("sp_reg_rule_review_update", params, msg_only=True)
 
-    # create trade doc meta 
     def create_trade_documents_meta(self, trade_doc_meta: dict):
         params = [trade_doc_meta.get(key) for key in
                   ['td_id', 'issuer_id', 'investor_type', 'document_type_id', 'optional', 'email_address', 'notes',
                    'created_by']]
         return self.db_handler.handle_sp_call("sp_trade_documents_meta_create", params, msg_only=True)
 
-    # update trade doc meta 
     def update_trade_documents_meta(self, trade_doc_meta: dict):
         params = [trade_doc_meta.get(key) for key in
                   ['td_id', 'issuer_id', 'investor_type', 'document_type_id', 'optional', 'email_address', 'notes',
                    'created_by']]
         return self.db_handler.handle_sp_call("sp_trade_documents_meta_update", params, msg_only=True)
 
-    # delete trade doc meta
     def delete_trade_documents_meta(self, trade_doc_meta: dict):
         params = [trade_doc_meta.get(key) for key in
                   ['td_id', 'created_by']]
         return self.db_handler.handle_sp_call("sp_trade_documents_meta_delete", params, msg_only=True)
 
-    # list trade documents meta 
-    def list_trade_docs_meta(self):
+    def list_trade_docs_meta(self) -> dict:
         return self.db_handler.handle_sp_call("sp_trade_documents_meta_list", rec_type_key="TRADE_DOCUMENTS_META")
 
-    # create investor type
     def create_investor_type(self, investor_type: dict):
         params = [investor_type.get(key) for key in ['investor_id', 'name', 'description', 'created_by']]
         return self.db_handler.handle_sp_call("sp_investor_type_create", params, msg_only=True)
 
-    # update investor type 
     def update_investor_type(self, investor_type: dict):
         params = [investor_type.get(key) for key in ['investor_id', 'name', 'description', 'created_by']]
         return self.db_handler.handle_sp_call("sp_investor_type_update", params, msg_only=True)
 
-    # delete investor type 
     def delete_investor_type(self, investor_type: dict):
         params = [investor_type.get(key) for key in ['investor_id', 'created_by']]
         return self.db_handler.handle_sp_call("sp_investor_type_delete", params, msg_only=True)
 
-    # list investor type 
-    def list_all_investor_type(self):
+    def list_all_investor_type(self) -> dict:
         return self.db_handler.handle_sp_call("sp_investor_type_list", rec_type_key='INVESTOR_TYPE_LIST')
 
-    # list_issuers_list
-    def list_issuers_list(self):
+    def list_issuers_list(self) -> dict:
         return self.db_handler.handle_sp_call("sp_trade_issuers_list", rec_type_key="ISSUERS_LIST")
 
-    # list_document_type
-    def lookup_list_document_type_by_name(self, name: str):
+    def lookup_list_document_type_by_name(self, name: str) -> dict:
         params = [name]
         return self.db_handler.handle_sp_call("sp_lookup_doctypes_name", params, rec_type_key="DOC_TYPE")
 
-    # list_document_type
-    def lookup_list_document_type_by_id(self, id: int):
+    def lookup_list_document_type_by_id(self, id: int) -> dict:
         params = [id]
         return self.db_handler.handle_sp_call("sp_lookup_doctypes_id", params, rec_type_key="DOC_TYPE")
+
+    def get_all_transaction_type(self) -> dict:
+        return self.db_handler.handle_sp_call("sp_get_all_transaction_types", rec_type_key="transaction_type")
+
+    def get_all_trade_list(self) -> dict:
+        return self.db_handler.handle_sp_call("sp_trade_list_all", rec_type_key="TRADE_LIST")

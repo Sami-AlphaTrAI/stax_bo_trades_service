@@ -388,6 +388,32 @@ async def list_document_type_by_name(type_id: int):
         return {"status": "error", "message": f"Failed to retrieve list all docs type"}
 
 
+# List transaction type
+@app.get("/list_all_transaction_types")
+async def list_all_transaction_type():
+    try:
+        result = data_retriever.get_all_transaction_type()
+        logging.info(f"Successfully retrieve transaction types")
+        return result
+
+    except Exception as e:
+        logging.error(f"Failed to retrieve transaction types{e}")
+        return {"status": "error", "message": f"Failed to retrieve all transaction types"}
+
+
+# List all trades
+@app.get("/list_all_trades")
+async def list_all_trade():
+    try:
+        result = data_retriever.get_all_trade_list()
+        logging.info(f"Successfully retrieve trade list")
+        return result
+
+    except Exception as e:
+        logging.error(f"Failed to retrieve list trades {e}")
+        return {"status": "error", "message": f"Failed to retrieve list all trades"}
+
+
 if __name__ == "__main__":
     import uvicorn
 

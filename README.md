@@ -1,5 +1,11 @@
 # stax_bo_trades_service
 
++ v0.0.5
+    + adding /list_all_transaction_types return all transaction types
+    + adding /list_all_trades return trade records
+    + tested with db v1.0.42
+
+
 + v0.0.4
     + tested with db v1.0.40
     + fix db_trade/handle_sp_call for empty list message
