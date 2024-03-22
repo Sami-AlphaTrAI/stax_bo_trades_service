@@ -1,11 +1,13 @@
 from mysql.connector import Error
 from datetime import date, datetime
 import logging
-import logger_config
 import mysql.connector
 from fastapi import HTTPException
 import json
 import os
+
+from dbutil_package.dbutil import logger_config
+from dbutil_package.dbutil.common import TradeDBHandler
 
 
 # Custom Exceptions
@@ -19,118 +21,6 @@ class UpsertException(Exception):
 
 class RepNotFoundError(Exception):
     pass
-
-
-class DBHandler:
-    def __init__(self, connection):
-        self.conn = connection
-
-    def handle_sp_call(self, sp, params=None, rec_type_key=None, msg_only=False, rec_type_in_data=False) -> dict:
-        try:
-            data = self._execute_sp(sp, params)
-            data_result = {}
-            # Initialize the response dictionary
-            response = {}
-            message = ""
-
-            if msg_only:
-                if len(data) != 0:
-                    message = list(data[0].keys())[0]
-
-                response["message"] = message
-
-                self.conn.commit()
-                response["status"] = "success"
-                return response
-
-            if rec_type_key is not None and len(data) > 0 and len(list(data[0].keys())) > 1:
-                data_result[rec_type_key] = data
-                response["data"] = data_result
-                self.conn.commit()
-                response["status"] = "success"
-                return response
-
-            if rec_type_key is not None and len(data) > 0 and len(list(data[0].keys())) == 1:
-                response["status"] = "error"
-                response["message"] = list(data[0].keys())[0]
-                self.conn.commit()
-                return response
-
-            if rec_type_key is not None and len(data) == 0:
-                response["status"] = "success"
-                data_result = data
-                response["data"] = data_result
-                self.conn.commit()
-                return response
-
-            if rec_type_key is not None and data_rec.get(rec_type_key) is None:
-                response["status"] = "error"
-                response["message"] = list(data[0].keys())[0]
-                self.conn.commit()
-                return response
-
-            if rec_type_in_data:
-                for data_rec in data:
-                    # if we are expecting rec_type_in data and we did not get one
-                    # then it must have been an error
-                    if data_rec.get("rec_type") is None:
-                        response["status"] = "error"
-                        response["message"] = list(data[0].keys())[0]
-                        self.conn.commit()
-                        return response
-                    if data_rec.get("rec_type") is not None:
-                        rec_type = data_rec.pop('rec_type')
-                        data_result.setdefault(rec_type, []).append(data_rec)
-                if data_result:
-                    response["data"] = data_result
-                    self.conn.commit()
-                    if response.get("status") is None:  # check if we have already set the status
-                        response["status"] = "success"
-
-                        # If there's any processed data, add it to the response
-            # if data_result:
-            #    response["data"] = data_result   
-            # self.conn.commit()
-            # if response.get("status") is None: # check if we have already set the status
-            #    response["status"] = "success"
-            return response
-
-        # Handle any database related errors
-        except mysql.connector.Error as e:
-            self.conn.rollback()
-            logging.error(f"Database Error: {e}")
-            return {"status": "error", "message": f"Database error: {str(e)}"}
-
-        # Handle all other exceptions
-        except Exception as e:
-            logging.error(f"Unexpected Error: {e}")
-            return {"status": "error", "message": f"Unexpected error: {str(e)}"}
-
-    def _execute_sp(self, sp, params=[]):
-        data = []
-        cursor = self.conn.cursor()
-
-        try:
-            if params:
-                cursor.callproc(sp, params)
-            else:
-                cursor.callproc(sp)
-
-            results = cursor.stored_results()
-
-            for result in results:
-                rows = result.fetchall()
-
-                if rows:
-                    columns = [column[0] for column in result.description]
-                    for row in rows:
-                        data.append(dict(zip(columns, row)))
-
-            return data
-
-        finally:  # To ensure the cursor always gets closed.
-            if cursor:
-                cursor.close()
 
 
 class AppRulesDataRetriever:
@@ -163,7 +53,7 @@ class AppRulesDataRetriever:
             )
 
             self.conn = self.create_connection()
-            self.db_handler = DBHandler(self.conn)
+            self.db_handler = TradeDBHandler(self.conn)
 
         except Error as e:
             logging.error("DB Error: %s", str(e))

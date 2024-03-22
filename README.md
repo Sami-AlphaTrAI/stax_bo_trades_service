@@ -1,3 +1,7 @@
++ v0.0.6
+    + integration of dbutil_package submodule; utilization of common database utilities and logging configurations.
+
+
 + v0.0.5
     + adding /list_all_transaction_types return all transaction types
     + adding /list_all_trades return trade records

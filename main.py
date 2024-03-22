@@ -5,9 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ValidationError, Json
 from typing import Any, Dict, List, Union
 from dbutil_package.db_trades import AppRulesDataRetriever
-from logger_config import setup_logging
 import json
 from enum import Enum, IntEnum
+
+from dbutil_package.dbutil.logger_config import setup_logging
 
 # Initialize logging.
 setup_logging()
