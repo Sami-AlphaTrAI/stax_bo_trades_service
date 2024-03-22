@@ -1,5 +1,3 @@
-# stax_bo_trades_service
-
 + v0.0.5
     + adding /list_all_transaction_types return all transaction types
     + adding /list_all_trades return trade records
