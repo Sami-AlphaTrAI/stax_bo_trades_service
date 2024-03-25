@@ -40,3 +40,15 @@
     - Added "/update_app_rule/" - Use PASS or FAIL for Status
 
     * Pending fix from SP to return override in look_app_rule_by_id *
+
+## Getting Started
+
+- To use the dbutil_common utilities, ensure you use __git submodule update --init --recursive__ to get dbutil files (
+  common.py)
+-
+
+## Prerequisites
+
+- Python 3.x
+- MySQL Server (Version 8.0 recommended)
+- Logging configuration setup (via logger_config.py)
