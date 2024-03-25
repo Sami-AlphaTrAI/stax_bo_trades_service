@@ -1,16 +1,4 @@
-from mysql.connector import Error
-from datetime import date, datetime
-import logging
-import mysql.connector
-from fastapi import HTTPException
-import json
-import os
-
-from dbutil_package.dbutil import logger_config
-from dbutil_package.dbutil.common import TradeDBHandler, DatabaseHandler
-
-
-# Custom Exceptions
+from dbutil_package.dbutil.common import DatabaseHandler
 
 
 class AppRulesDataRetriever(DatabaseHandler):
