@@ -35,17 +35,17 @@ are set correctly via .env file.
 ### v0.0.3
 
 - Synced with db v1.0.39
-- Added /create_trade_doc_meta
-- Added /update_trade_doc_meta
-- Added /delete_trade_doc_meta
-- Added /list_trade_docs_meta
-- Added /create_investor_type
-- Added /update_investor_type
-- Added /delete_investor_type
-- Added /list_investor_type
-- Added /list_issuers_list
-- Added /list_document_type_name/{type_name}
-- Added /list_document_type_id/{type_id}
+- Added `/create_trade_doc_meta`
+- Added `/update_trade_doc_meta`
+- Added `/delete_trade_doc_meta`
+- Added `/list_trade_docs_meta`
+- Added `/create_investor_type`
+- Added `/update_investor_type`
+- Added `/delete_investor_type`
+- Added `/list_investor_type`
+- Added `/list_issuers_list`
+- Added `/list_document_type_name/{type_name}`
+- Added `/list_document_type_id/{type_id}`
 
 ### v0.0.4
 
@@ -55,17 +55,27 @@ are set correctly via .env file.
 
 ### v0.0.5
 
-- Added /list_all_transaction_types return all transaction types
-- Added /list_all_trades return trade records
+- Added `/list_all_transaction_types` return all transaction types
+- Added `/list_all_trades` return trade records
 - Synced with db v1.0.42
 
 ### v0.0.6
 
 - Integration of dbutil_package submodule; utilization of common database utilities and logging configurations.
 
-### v0.0.7 (latest)
+### v0.0.7
 
 - Update dbutil to v0.0.5: Enhanced `DatabaseHandler` with environment variable management for database configuration.
+
+### v0.0.8 (latest)
+
+- Synced with db v1.0.47
+- Added `/app_doc_uploads/{app_id}` for retrieving application document uploads by ID.
+- Added `/lookup_client/{app_id}` for looking up client information by ID.
+- Added `/lookup_forms/` for looking up forms.
+- Added `/lookup_response/{app_id}` for looking up responses by ID.
+- Added `/lookup_sponsor/{app_id}` for looking up sponsor information by ID.
+- Added `/lookup_rep_join/{app_id}` for looking up representative join information by ID.
 
 ## Configuration
 

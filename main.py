@@ -415,6 +415,139 @@ async def list_all_trade():
         return {"status": "error", "message": f"Failed to retrieve list all trades"}
 
 
+@app.get("/app_doc_uploads/{app_id}")
+async def app_doc_uploads(app_id: int):
+    try:
+        result = data_retriever.app_doc_uploads_by_id(app_id)
+        logging.info(f"Successfully retrieve app doc uploads")
+        return result
+
+    except Exception as e:
+        logging.error(f"faild to retrieve app doc uploads")
+
+
+@app.get("/lookup_client/{app_id}", status_code=200)
+async def lookup_client(app_id: int):
+    try:
+        result = data_retriever.lookup_client_by_id(app_id)
+        if result.get("status") == "error":
+            if result.get("error_code") == "DB_ERR":
+                return {"status": "error", "message": "Database Error: Client does not exist"}
+
+        if result.get("status") == "success" and result.get("data") is None:
+            logging.error(f"Failed to lookup client with ID {app_id}")
+            return result
+
+        if result.get("status") == "success":
+            logging.info(f"Successfully retrieved client details for ID {app_id}")
+            return result
+
+        logging.error(f"Failed to lookup client with ID {app_id}")
+        return {"status": "error", "message": f"Failed to lookup client with ID {app_id}. ID not found."}
+
+    except Exception as e:
+        logging.exception(f"Unexpected error while looking up client: {e}")
+        return {"status": "error", "message": f"Unexpected error while looking up client: {e}"}
+
+
+@app.get("/lookup_forms/", status_code=200)
+async def lookup_forms():
+    try:
+        result = data_retriever.lookup_forms()
+
+        if result.get("status") == "error":
+            if result.get("error_code") == "DB_ERR":
+                return {"status": "error", "message": "Database Error: Form does not exist"}
+
+        if result.get("status") == "success" and result.get("data") is None:
+            logging.error(f"Failed to lookup forms ")
+            return result
+
+        if result.get("status") == "success":
+            logging.info(f"Successfully retrieved form details")
+            return result
+
+        logging.error(f"Failed to lookup forms")
+        return {"status": "error", "message": f"Failed to lookup forms"}
+
+    except Exception as e:
+        logging.exception(f"Unexpected error while looking up forms {e}")
+        return {"status": "error", "message": f"Unexpected error while looking up forms {e}"}
+
+
+@app.get("/lookup_response/{app_id}", status_code=200)
+async def lookup_response(app_id: int):
+    result = data_retriever.lookup_response_by_id(app_id)
+
+    if result.get("status") == "error":
+        if result.get("error_code") == "DB_ERR":
+            return {"status": "error", "message": "Database Error: Response does not exist"}
+
+    if result.get("status") == "success" and result.get("data") is None:
+        logging.error(f"Failed to lookup response with ID {app_id}")
+        return result
+
+    if result.get("status") == "success":
+        logging.info(f"Successfully retrieved response details for ID {app_id}")
+        return result
+
+    logging.error(f"Failed to lookup response with ID {app_id}")
+    return {"status": "error", "message": f"Failed to lookup response with ID {app_id}. ID not found."}
+
+
+@app.get("/lookup_sponsor/{app_id}", status_code=200)
+async def lookup_sponsor(app_id: int):
+    try:
+        result = data_retriever.lookup_sponsor_by_id(app_id)
+
+        if result.get("status") == "error":
+            if result.get("error_code") == "DB_ERR":
+                return {"status": "error", "message": "Database Error: Sponsor does not exist"}
+
+        if result.get("status") == "success" and result.get("data") is None:
+            logging.error(f"Failed to lookup sponsor with ID {app_id}")
+            return result
+
+        if result.get("status") == "success":
+            logging.info(f"Successfully retrieved sponsor details for ID {app_id}")
+            return result
+
+        logging.error(f"Failed to lookup sponsor with ID {app_id}")
+        return {"status": "error",
+                "message": f"Failed to lookup sponsor with ID {app_id}. ID not found."}
+
+    except Exception as e:
+        logging.exception(f"Unexpected error while looking up sponsor: {e}")
+        return {"status": "error",
+                "message": f"Unexpected error while looking up sponsor: {e}"}
+
+
+@app.get("/lookup_rep_join/{app_id}", status_code=200)
+async def lookup_rep_join(app_id: int):
+    try:
+        result = data_retriever.lookup_rep_join_by_id(app_id)
+        if result.get("status") == "error":
+            if result.get("error_code") == "DB_ERR":
+                return {"status": "error", "message": "Database Error: Rep Join does not exist"}
+
+        if result.get("status") == "success" and result.get("data") is None:
+            logging.error(f"Failed to lookup rep join with ID {app_id}")
+            return result
+
+        if result.get("status") == "success":
+            logging.info(f"Successfully retrieved rep join details for ID {app_id}")
+            return result
+
+        logging.error(f"Failed to lookup rep join with ID {app_id}")
+        return {"status": "error",
+                "message": f"Failed to lookup rep join with ID {app_id}. ID not found."}
+
+    except Exception as e:
+        logging.exception(f"Unexpected error while looking up rep join: {e}")
+        return {"status": "error",
+                "message": f"Unexpected error while looking up rep join: {e}"}
+
+
 if __name__ == "__main__":
     import uvicorn
 

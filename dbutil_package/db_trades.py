@@ -8,54 +8,6 @@ class AppRulesDataRetriever(DatabaseHandler):
     def __init__(self):
         super().__init__()
         self.db_handler = self.trades_handle_sp_call(self.conn)
-        # def __init__(self):
-        #     """
-        #     Creates a connection to a MySQL database using environment variables,
-        #     or falls back to a local connection if environment variables are not set.
-        #     """
-        #     # Attempt to use environment variables for the connection
-        #     host = os.environ.get('MYSQL_HOST', 'localhost')
-        #     user = os.environ.get('MYSQL_USER', 'root')
-        #     password = os.environ.get('MYSQL_PASSWORD', 'Password')
-        #     database = os.environ.get('MYSQL_DATABASE', 'stax_backoffice')
-        #     self.db_config = {
-        #         "host": host,
-        #         "user": user,
-        #         "password": password,
-        #         "database": database,
-        #     }
-        #     logger_config.setup_logging()
-        #     try:
-        #         connection = mysql.connector.connect(
-        #             host=host,
-        #             user=user,
-        #             password=password,
-        #             database=database
-        #         )
-        #
-        #         self.conn = self.create_connection()
-        #         self.db_handler = TradeDBHandler(self.conn)
-        #
-        #     except Error as e:
-        #         logging.error("DB Error: %s", str(e))
-        #         # return {"error": f"Database error: {e}"}
-        #
-        # # Establish a new database connection
-        # def create_connection(self):
-        #     try:
-        #         conn = mysql.connector.connect(**self.db_config)
-        #         if conn.is_connected():
-        #             logging.info('Successfully connected to MySQL database')
-        #         return conn
-        #     except Error as e:
-        #         logging.error(f"Error connecting to MySQL: {e}")
-        #         raise HTTPException(status_code=500, detail="Database connection error")
-        #
-        # # Serializes datetime and date objects for JSON
-        # def _json_serial(self, obj):
-        #     if isinstance(obj, (datetime, date)):
-        #         return obj.isoformat()
-        #     raise TypeError("Type %s not serializable" % type(obj))
 
     # Retrieve specific app rules statuses
     def lookup_app_rules(self, a_app_id: int) -> dict:
@@ -129,3 +81,21 @@ class AppRulesDataRetriever(DatabaseHandler):
 
     def get_all_trade_list(self) -> dict:
         return self.trades_handle_sp_call("sp_trade_list_all", rec_type_key="TRADE_LIST")
+
+    def app_doc_uploads_by_id(self, app_id) -> dict:
+        return self.trades_handle_sp_call("sp_stxstage_app_docs_uploads", [app_id], rec_type_key="APP_DOC_UPLOADS")
+
+    def lookup_client_by_id(self, app_id) -> dict:
+        return self.trades_handle_sp_call("sp_stxstage_client_lookup", [app_id], rec_type_key="STAX_STAGE_CLIENT")
+
+    def lookup_forms(self) -> dict:
+        return self.trades_handle_sp_call("sp_stxstage_forms_lookup", rec_type_key="STAX_STAGE_FORMS")
+
+    def lookup_response_by_id(self, app_id) -> dict:
+        return self.trades_handle_sp_call("sp_stxstage_responses_lookup", [app_id], rec_type_key="STAX_STAGE_RESPONSES")
+
+    def lookup_sponsor_by_id(self, app_id) -> dict:
+        return self.trades_handle_sp_call("sp_stxstage_sponsor_lookup", [app_id], rec_type_key="STAX_STAGE_SPONSOR")
+
+    def lookup_rep_join_by_id(self, app_id) -> dict:
+        return self.trades_handle_sp_call("sp_stxstage_repJoin_lookup", [app_id], rec_type_key="stax_stage_rep")
