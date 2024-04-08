@@ -67,7 +67,7 @@ are set correctly via .env file.
 
 - Update dbutil to v0.0.5: Enhanced `DatabaseHandler` with environment variable management for database configuration.
 
-### v0.0.8 (latest)
+### v0.0.8
 
 - Synced with db v1.0.47
 - Added `/app_doc_uploads/{app_id}` for retrieving application document uploads by ID.
@@ -76,6 +76,12 @@ are set correctly via .env file.
 - Added `/lookup_response/{app_id}` for looking up responses by ID.
 - Added `/lookup_sponsor/{app_id}` for looking up sponsor information by ID.
 - Added `/lookup_rep_join/{app_id}` for looking up representative join information by ID.
+
+### v0.0.9 (latest)
+
+- Sync with dbutil v0.0.6.
+- Refactored the `TradesDataRetriever`. Removed unnecessary comments and irrelevant codes.
+- Updated parameters passing method for `trades_handle_sp_call`
 
 ## Configuration
 
