@@ -79,7 +79,7 @@ class TransactionCreateModel(BaseModel):
 #         raise HTTPException(status_code=403, detail="Not enough permissions")
 #     return role
 
-app = FastAPI()
+app = FastAPI(title="STAX_BO_TRADES", version="0.0.9")
 
 # Set CORS to allow all origins.
 origins = ["*"]
