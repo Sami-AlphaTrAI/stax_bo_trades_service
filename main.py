@@ -2,6 +2,7 @@ import logging
 from datetime import datetime, date
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from pydantic import BaseModel, ValidationError, Json
 from typing import Any, Dict, List, Union
 from dbutil_package.db_trades import AppRulesDataRetriever
@@ -79,18 +80,34 @@ class TransactionCreateModel(BaseModel):
 #         raise HTTPException(status_code=403, detail="Not enough permissions")
 #     return role
 
-app = FastAPI(title="STAX_BO_TRADES", version="0.0.9")
-
-# Set CORS to allow all origins.
-origins = ["*"]
-
-# Initialize RepDataRetriever to interact with DB
-data_retriever = AppRulesDataRetriever()
-
 
 class DatabaseError(Exception):
     pass
 
+
+data_retriever = AppRulesDataRetriever()
+
+app = FastAPI()
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="STAX_BO_TRADES", version="0.0.9",
+        openapi_version="3.0.0",
+        routes=app.routes,
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
+
+# Set CORS to allow all origins.
+
+# Initialize RepDataRetriever to interact with DB
+origins = ["*"]
 
 # Add CORS middleware settings
 app.add_middleware(
@@ -135,7 +152,7 @@ async def lookup_app_rules(app_id: int):
     return {"status": "error", "message": f"Failed to lookup rules for application {app_id}. ID not found."}
 
 
-@app.get("/look_app_rule_by_id/{app_id,rule_id}", status_code=200)
+@app.get("/look_app_rule_by_id", status_code=200)
 async def look_app_rule_by_id(app_id: int, rule_id: int):
     result = data_retriever.look_app_rule_by_id(app_id, rule_id)
     if result.get("status") == "error":

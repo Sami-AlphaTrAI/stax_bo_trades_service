@@ -77,11 +77,16 @@ are set correctly via .env file.
 - Added `/lookup_sponsor/{app_id}` for looking up sponsor information by ID.
 - Added `/lookup_rep_join/{app_id}` for looking up representative join information by ID.
 
-### v0.0.9 (latest)
+### v0.0.9
 
 - Sync with dbutil v0.0.6.
 - Refactored the `TradesDataRetriever`. Removed unnecessary comments and irrelevant codes.
 - Updated parameters passing method for `trades_handle_sp_call`
+
+### v0.1.0
+
+- Used OpenAPI v3.0.0 schema
+- Sync with db 1.0.66
 
 ## Configuration
 
