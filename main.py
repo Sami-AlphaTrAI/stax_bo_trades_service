@@ -94,7 +94,7 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
-        title="STAX_BO_TRADES", version="0.0.9",
+        title="STAX_BO_TRADES", version="0.1.0",
         openapi_version="3.0.0",
         routes=app.routes,
     )
